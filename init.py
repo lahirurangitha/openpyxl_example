@@ -2,14 +2,18 @@ from __future__ import division
 import openpyxl
 
 # new workbook
-resultBook = openpyxl.Workbook()
-dest_filename = 'resultSet.xlsx'
-sheetResult = resultBook.active
-sheetResult.title = "results"
+if(openpyxl.load_workbook('resultSet.xlsx')):
+    resultBook = openpyxl.load_workbook('resultSet.xlsx')
+    dest_filename = 'resultSet.xlsx'
+else:
+    resultBook = openpyxl.Workbook()
+    dest_filename = 'resultSet.xlsx'
+    sheetResult = resultBook.active
+    sheetResult.title = "results"
 sheetResult = resultBook.get_sheet_by_name("results")
 
 # retrieve data set
-book = openpyxl.load_workbook('test.xlsx')
+book = openpyxl.load_workbook('data1.xlsx')
 
 sheetNames = book.get_sheet_names()
 toHeader = book.get_sheet_by_name(sheetNames[1])
@@ -52,6 +56,7 @@ for row in sheetResult['AD' + str(h_line):'AQ' + str(h_line)]:
         cell.value = h[index]
         index = index + 1
 
+sheetResult['AR' + str(h_line)] = "Worksheet"
 
 # data lines creation
 d_line = 2
@@ -121,6 +126,14 @@ for sheet in book.worksheets:
         for cell in row:
             cell.value = i[index]
             index = index + 1
+
+    #worksheet
+    for row in sheetResult['AR' + str(d_line):'AR' + str(d_line)]:
+        index = 0
+        for cell in row:
+            cell.value = sheet.title
+            index = index + 1
+    print(sheet.title)
     d_line = d_line + 1
 
 resultBook.save(dest_filename)
